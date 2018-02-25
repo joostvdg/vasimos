@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dui-service
+  namespace: default
+spec:
+  selector:
+    k8s-app: dui
+  ports:
+  - protocol: TCP
+    port: 7777
+  type: NodePort

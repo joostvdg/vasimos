@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: artifactory-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "tectonic"
+    ingress.kubernetes.io/rewrite-target: /artifactory
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/use-port-in-redirects: "true"
+spec:
+  rules:
+    - host: console.tectonicsandbox.com
+      http:
+        paths:
+          - path: /artifactory
+            backend:
+              serviceName: artifactory
+              servicePort: 8081

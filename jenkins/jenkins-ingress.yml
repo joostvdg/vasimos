@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "tectonic"
+    ingress.kubernetes.io/rewrite-target: /jenkins
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/use-port-in-redirects: "true"
+spec:
+  rules:
+    - host: console.tectonicsandbox.com
+      http:
+        paths:
+          - path: /jenkins
+            backend:
+              serviceName: jenkins-service
+              servicePort: 8080

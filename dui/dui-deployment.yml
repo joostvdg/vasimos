@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dui-deployment
+  namespace: default
+  labels:
+    k8s-app: dui
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        k8s-app: dui
+    spec:
+      containers:
+        - name: master
+          image: caladreas/buming
+          ports:
+            - name: http
+              containerPort: 7777
+          lifecycle:
+            preStop:
+              exec:
+                command: ["killall", "java" , "-INT"]
+      terminationGracePeriodSeconds: 60
