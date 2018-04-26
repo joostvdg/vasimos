@@ -15,5 +15,5 @@ spec:
         paths:
           - path: /jenkins
             backend:
-              serviceName: jenkins-service
+              serviceName: jenkins-lb
               servicePort: 8080

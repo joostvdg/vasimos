@@ -23,12 +23,16 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: jenkins-service
+  name: jenkins-lb
   namespace: default
 spec:
   selector:
     k8s-app: jenkins
+  type: LoadBalancer
   ports:
-  - protocol: TCP
-    port: 8080
-  type: NodePort
+   - name: jenkins
+     port: 8080
+     targetPort: 8080
+   - name: jenkins-agent
+     port: 50000
+     targetPort: 50000
