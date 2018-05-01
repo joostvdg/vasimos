@@ -1,0 +1,31 @@
+pipeline {
+    agent {
+        label 'vasimos'
+    }
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')
+        timeout(activity: true, time: 15)
+        timestamps()
+    }
+    stages {
+        stage('Tests') {
+            steps {
+                sh 'uname -a'
+                sh 'docker -v'
+                sh 'docker-compose -v'
+            }
+        }
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/joostvdg/buming.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    def image = docker.build("dui:jdk10")
+                }
+            }
+        }
+    }
+}

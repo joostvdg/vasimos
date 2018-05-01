@@ -1,38 +1,69 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Namespace
 metadata:
-  name: jenkins-deployment
-  namespace: default
-  labels:
-    k8s-app: jenkins
+  name: vasimos
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins
+  namespace: vasimos
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        k8s-app: jenkins
-    spec:
-      containers:
-        - name: master
-          image: caladreas/jenkins-master-k8s
-          ports:
-            - name: http
-              containerPort: 8080
+  rules:
+  - http:
+      paths:
+      - path: /jenkins
+        backend:
+          serviceName: jenkins
+          servicePort: 8080
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: jenkins-lb
-  namespace: default
+  name: jenkins
+  namespace: vasimos
 spec:
   selector:
-    k8s-app: jenkins
-  type: LoadBalancer
+    app: jenkins
   ports:
-   - name: jenkins
+   - name: http
      port: 8080
      targetPort: 8080
-   - name: jenkins-agent
+   - name: jnlp
      port: 50000
      targetPort: 50000
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: vasimos
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: master
+          image: caladreas/jenkins-master-k8s
+          env:
+          - name: JENKINS_OPTS
+            value: --prefix=/jenkins
+          volumeMounts:
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-home
+          emptyDir: {}
+
