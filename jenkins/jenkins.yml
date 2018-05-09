@@ -38,7 +38,20 @@ spec:
    - name: jnlp
      port: 50000
      targetPort: 50000
-
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: test-claim
+  namespace: vasimos
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2048Mi
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -65,5 +78,6 @@ spec:
             mountPath: /var/jenkins_home
       volumes:
         - name: jenkins-home
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: test-claim
 
