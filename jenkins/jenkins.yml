@@ -51,7 +51,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 2048Mi
+      storage: 2Gi
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
