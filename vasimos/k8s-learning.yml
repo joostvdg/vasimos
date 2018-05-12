@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: k8s-learning
+  namespace: vasimos
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /k8s-learning
+        backend:
+          serviceName: k8s-learning
+          servicePort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: k8s-learning
+  namespace: vasimos
+spec:
+  selector:
+    app: k8s-learning
+  ports:
+   - name: http
+     port: 80
+     targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-learning
+  namespace: vasimos
+  labels:
+    app: k8s-learning
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: k8s-learning
+    spec:
+      containers:
+        - name: master
+          image: caladreas/k8s-devops-learning
+
+
