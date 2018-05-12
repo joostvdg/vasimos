@@ -4,6 +4,7 @@ metadata:
   name: k8s-learning
   namespace: vasimos
   annotations:
+    ingress.kubernetes.io/rewrite-target: /
     ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
