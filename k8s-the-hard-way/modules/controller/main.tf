@@ -42,6 +42,7 @@ resource "google_compute_instance" "khw-controller" {
     }
   }
 
+  # compute-rw,storage-ro,service-management,service-control,logging-write,monitoring
   service_account {
     scopes = ["compute-rw",
       "storage-ro",

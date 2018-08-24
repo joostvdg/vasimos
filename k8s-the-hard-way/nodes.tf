@@ -11,5 +11,6 @@ module "worker" {
   machine_type = "${var.machine_type_workers}"
   num          = "${var.num_workers}"
   zone         = "${var.region_default_zone}"
+  network      = "${google_compute_network.khw.name}"
   subnet       = "${var.subnet_name}"
 }

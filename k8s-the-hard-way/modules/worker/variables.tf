@@ -10,6 +10,10 @@ variable "zone" {
   description = "The zone to create the controllers in"
 }
 
+variable "network" {
+  description = "The network to use for routes"
+}
+
 variable "subnet" {
   description = "The subnet to create the nic in"
 }

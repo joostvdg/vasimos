@@ -59,3 +59,8 @@ variable "subnet_cidr" {
   default     = "10.240.0.0/24"
   description = "The cidr block for the subnet"
 }
+
+variable "kubernetes-cluster-dns" {
+  default     = "kubernetes.default.svc.cluster.local"
+  description = "DNS for the cluster, for host related queries such as health checks."
+}
