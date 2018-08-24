@@ -1,0 +1,21 @@
+# This is to accompany the SonarQube helm installation
+# The Ingress defined in there is not flexible enough
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sonar
+  #namespace: <whateveryouwantittobe>
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # This might not be required
+    # nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: sonar-sonarqube
+              servicePort: 9000
+            path: /
+      host: sonar.127.0.0.1.nip.io

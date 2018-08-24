@@ -14,15 +14,6 @@ spec:
       containers:
         - name: artifactory
           image: docker.bintray.io/jfrog/artifactory-oss:latest
-          env:
-          - name: DB_TYPE
-            value: postgresql
-          - name: DB_USER
-            value: artifactory
-          - name: DB_PASSWORD
-            value: password
-          - name: DB_HOST
-            value: postgresql-k8s-service
           ports:
           - containerPort: 8081
           volumeMounts:
@@ -33,6 +24,19 @@ spec:
         persistentVolumeClaim:
           claimName: artifactory-claim
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: artifactory-claim
+  labels:
+    group: artifactory-k8s-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,9 +45,29 @@ metadata:
     app: artifactory
     group: artifactory-k8s
 spec:
-  type: NodePort
-  ports:
-  - port: 8081
-    protocol: TCP
   selector:
     app: artifactory
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8081
+    protocol: TCP
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: artifactory
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/app-root: "/artifactory"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /artifactory
+            backend:
+              serviceName: artifactory
+              servicePort: 80
+      host: artifactory.127.0.0.1.nip.io
