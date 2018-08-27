@@ -8,3 +8,5 @@
 **/terraform.tfstate.backup
 **/terraform.tfstate
 **/*/*-creds.json
+k8s-the-hard-way/script/*.pem
+k8s-the-hard-way/scripts/*.kubeconfig
