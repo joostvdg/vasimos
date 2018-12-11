@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ldap
+spec:
+  serviceName: "ldap"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ldap
+  template:
+    metadata:
+      labels:
+        app: ldap
+    spec:
+      containers:
+      - name: ldap
+        image: osixia/openldap:1.2.2
+        ports:
+        - containerPort: 389
+          name: openldap
+        volumeMounts:
+          - name: ldap-data
+            mountPath: /var/lib/ldap
+          - name: ldap-config
+            mountPath: /etc/ldap/slapd.d
+        env:
+          - name: LDAP_ORGANISATION
+            value: "Kearos"
+          - name: LDAP_DOMAIN
+            value: "kearos.net"
+          - name: LDAP_ADMIN_PASSWORD
+            value: "7lJhKO37INbmq31t"
+          - name: LDAP_CONFIG_PASSWORD
+            value: "E903Y7dhwlhddjEs"
+          - name: LDAP_READONLY_USER
+            value: "true"
+          - name: LDAP_READONLY_USER_USERNAME
+            value: "readonly"
+          - name: LDAP_READONLY_USER_PASSWORD
+            value: "2OkYuYm1A5TJysaO"
+  volumeClaimTemplates:
+  - metadata:
+      name: ldap-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: ldap-config
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ldap
+  name: ldap-service
+spec:
+  ports:
+    - port: 389
+  selector:
+    app: ldap
