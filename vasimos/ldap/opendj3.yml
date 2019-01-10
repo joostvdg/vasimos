@@ -1,0 +1,38 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opendj3
+  labels:
+    app: opendj3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opendj3
+  template:
+    metadata:
+      labels:
+        app: opendj3
+    spec:
+      containers:
+      - name: opendj3
+        image: caladreas/opendj:4.3.1
+        ports:
+        - containerPort: 1389
+          name: ldap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: opendj3
+  name: opendj3
+spec:
+  ports:
+    - name: http
+      port: 389
+      targetPort: 1389
+      protocol: TCP
+  selector:
+    app: opendj3
