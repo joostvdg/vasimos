@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: jenkins.aks.kearos.net
+  namespace: obs
+spec:
+  secretName: tls-jenkins-aks-kearos-net
+  dnsNames:
+  - jenkins.aks.kearos.net
+  acme:
+    config:
+    - http01:
+        ingressClass: nginx
+      domains:
+      - jenkins.aks.kearos.net
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

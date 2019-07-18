@@ -1,0 +1,39 @@
+master:
+  serviceType: ClusterIP
+  healthProbes: false
+  installPlugins:
+    - blueocean:1.17.0
+    - prometheus:2.0.0
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "1524Mi"
+    limits:
+      cpu: "2000m"
+      memory: "3072Mi"
+  ingress:
+    enabled: true
+    hostName: jenkins.aks.kearos.net
+    tls:
+      - secretName: tls-jenkins-aks-kearos-net
+        hosts:
+          - jenkins.aks.kearos.net
+  podAnnotations:
+    prometheus.io/path: /prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+agent:
+  enabled: false
+
+
+  # image: "cloudbees/cloudbees-jenkins-distribution"
+  # imageTag: "2.176.1.4"
+  # runAsUser: 1000
+  # fsGroup: 1000
+
+  # installPlugins:
+  #   - kubernetes:1.16.0
+  #   - workflow-job:2.32
+  #   - workflow-aggregator:2.6
+  #   - credentials-binding:1.19
+  #   - git:3.10.0
