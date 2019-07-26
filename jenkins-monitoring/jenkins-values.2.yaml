@@ -15,11 +15,11 @@ master:
   javaOpts: "-XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions"
   ingress:
     enabled: true
-    hostName: jenkins.gke.kearos.net
+    hostName: jenkins3.gke.kearos.net
     tls:
-      - secretName: tls-jenkins-gke-kearos-net
+      - secretName: tls-jenkins3-gke-kearos-net
         hosts:
-          - jenkins.gke.kearos.net
+          - jenkins3.gke.kearos.net
     annotations:
       certmanager.k8s.io/cluster-issuer: "letsencrypt-prod"
       kubernetes.io/ingress.class: nginx
@@ -35,7 +35,6 @@ agent:
   enabled: true
 rbac:
   create: true
-
 
   # image: "cloudbees/cloudbees-jenkins-distribution"
   # imageTag: "2.176.1.4"

@@ -21,3 +21,45 @@ datasources:
      url: http://prometheus-server
      access: proxy
      isDefault: true
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'Default'
+      orgId: 1
+      folder: 'default'
+      type: file
+      disableDeletion: true
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+dashboards:
+  default:
+    Jenkins-OLD:
+      gnetId: 9964
+      revision: 1
+      datasource: Prometheus
+    Costs-Pod:
+      gnetId: 6879
+      revision: 1
+      datasource: Prometheus
+    Costs:
+      gnetId: 8670
+      revision: 1
+      datasource: Prometheus
+    Summary:
+      gnetId: 8685
+      revision: 1
+      datasource: Prometheus
+    Capacity:
+      gnetId: 5228
+      revision: 6
+      datasource: Prometheus
+    Deployments:
+      gnetId: 8588
+      revision: 1
+      datasource: Prometheus
+    Volumes:
+      gnetId: 6739
+      revision: 1
+      datasource: Prometheus
