@@ -1,0 +1,67 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'mypod'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: ninja
+    image: caladreas/build-c:latest
+    command: ['cat']
+    tty: true
+  - name: python
+    image: python:3-slim
+    command: ['cat']
+    tty: true
+"""
+    }
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://gn.googlesource.com/gn'
+      }
+    }
+    stage('Test Versions') {
+      steps {
+        sh 'java -version'
+        container('python') {
+          sh 'python --version'
+        }
+        container('ninja') {
+          sh 'ninja --version'
+        }
+      }
+    }
+    stage('Build') {
+      parallel {
+        stage('Python') {
+          steps {
+            container('ninja') {
+              sh 'python build/gen.py'
+            }
+          }
+        }
+        stage('Ninja') {
+          steps {
+            container('ninja') {
+              sh 'ninja -C out'
+              sh 'ls -lath'
+              sh 'ls -lath out'
+            }
+          }
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'ls -lath'
+        sh 'ls -lath out'
+        sh 'out/gn_unittests'
+      }
+    }
+  }
+}
+
