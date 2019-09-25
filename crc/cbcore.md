@@ -27,6 +27,12 @@ crc start \
 * `sudo vim /etc/resolvconf/resolv.conf.d/head`
 * sudo service resolvconf restart  
 
+### Fix Storage Issue
+
+> With beta-5 release, we found an issue with disk size. It is set default to 15GB instead of 30GB like we use to have with our past release (beta-4).
+
+There's a [guide on the CRC Wiki](https://github.com/code-ready/crc/wiki/Disk-space-issue-with-beta-5-release) on how to resolve this if you need to.
+
 ### Login as admin
 
 ```bash
@@ -44,7 +50,6 @@ kubectl get route -A
 ```bash
 open http://console-openshift-console.apps-crc.testing 
 ```
-
 
 ## Prepare A Storage Class
 
